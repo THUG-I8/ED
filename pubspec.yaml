@@ -1,0 +1,88 @@
+name: know_your_deen
+description: "تطبيق إسلامي شامل للقصص والأذكار والسبحة ومواقيت الصلاة - اعرف دينك"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # UI و التصميم
+  cupertino_icons: ^1.0.2
+  google_fonts: ^6.1.0
+  flutter_staggered_animations: ^1.1.1
+  lottie: ^3.0.0
+  shimmer: ^3.0.0
+  
+  # إدارة الحالة والتخزين
+  provider: ^6.1.1
+  shared_preferences: ^2.2.2
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  
+  # الموقع ومواقيت الصلاة
+  geolocator: ^10.1.0
+  permission_handler: ^11.2.0
+  adhan: ^2.3.0
+  
+  # الصوتيات والاهتزاز
+  flutter_tts: ^4.0.2
+  audioplayers: ^5.2.1
+  vibration: ^1.8.4
+  
+  # التوجه والبوصلة
+  flutter_compass: ^0.7.0
+  flutter_qiblah: ^2.3.2
+  
+  # التاريخ والوقت
+  intl: ^0.19.0
+  hijri: ^3.0.4
+  
+  # الإشعارات
+  flutter_local_notifications: ^16.3.2
+  workmanager: ^0.5.2
+  
+  # الشبكة والبيانات
+  http: ^1.1.2
+  dio: ^5.4.0
+  
+  # أخرى
+  url_launcher: ^6.2.2
+  share_plus: ^7.2.2
+  package_info_plus: ^5.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/audio/
+    - assets/fonts/
+    - assets/data/
+    - assets/animations/
+  
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo-Bold.ttf
+          weight: 700
+    - family: Amiri
+      fonts:
+        - asset: assets/fonts/Amiri-Regular.ttf
+        - asset: assets/fonts/Amiri-Bold.ttf
+          weight: 700
+    - family: NotoNaskh
+      fonts:
+        - asset: assets/fonts/NotoNaskhArabic-Regular.ttf
+        - asset: assets/fonts/NotoNaskhArabic-Bold.ttf
+          weight: 700
