@@ -1,306 +1,125 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import 'constants/app_colors.dart';
-import 'constants/app_strings.dart';
-import 'providers/story_provider.dart';
-import 'providers/dhikr_provider.dart';
-import 'providers/prayer_time_provider.dart';
-import 'providers/settings_provider.dart';
-import 'screens/splash_screen.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  // تعيين اتجاه الشاشة
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
-  
-  // تخصيص شريط الحالة
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: AppColors.primaryDark,
-      systemNavigationBarIconBrightness: Brightness.light,
-    ),
-  );
-
-  runApp(const KnowYourDeenApp());
+void main() {
+  runApp(const MyApp());
 }
 
-class KnowYourDeenApp extends StatelessWidget {
-  const KnowYourDeenApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // TRY THIS: Try running your application with "flutter run". You'll see
+        // the application has a purple toolbar. Then, without quitting the app,
+        // try changing the seedColor in the colorScheme below to Colors.green
+        // and then invoke "hot reload" (save your changes or press the "hot
+        // reload" button in a Flutter-supported IDE, or press "r" if you used
+        // the command line to start the app).
+        //
+        // Notice that the counter didn't reset back to zero; the application
+        // state is not lost during the reload. To reset the state, use hot
+        // restart instead.
+        //
+        // This works for code too, not just values: Most code changes can be
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => SettingsProvider()),
-        ChangeNotifierProvider(create: (_) => StoryProvider()),
-        ChangeNotifierProvider(create: (_) => DhikrProvider()),
-        ChangeNotifierProvider(create: (_) => PrayerTimeProvider()),
-      ],
-      child: Consumer<SettingsProvider>(
-        builder: (context, settingsProvider, child) {
-          return MaterialApp(
-            title: AppStrings.appName,
-            debugShowCheckedModeBanner: false,
-            
-            // دعم العربية
-            locale: const Locale('ar'),
-            supportedLocales: const [
-              Locale('ar', ''), // العربية
-            ],
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            
-            // تخصيص الثيم
-            theme: _buildLightTheme(),
-            darkTheme: _buildDarkTheme(),
-            themeMode: settingsProvider.isDarkMode 
-                ? ThemeMode.dark 
-                : ThemeMode.light,
-            
-            // الصفحة الرئيسية
-            home: const SplashScreen(),
-          );
-        },
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    return Scaffold(
+      appBar: AppBar(
+        // TRY THIS: Try changing the color here to a specific color (to
+        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // change color while the other colors stay the same.
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
       ),
-    );
-  }
-
-  // الثيم الفاتح
-  ThemeData _buildLightTheme() {
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primaryDark,
-        brightness: Brightness.light,
-        primary: AppColors.primaryDark,
-        secondary: AppColors.lightGold,
-        surface: AppColors.sandyBeige,
-        background: AppColors.softWhite,
-      ),
-      
-      // الخطوط العربية
-      textTheme: GoogleFonts.cairoTextTheme().copyWith(
-        headlineLarge: GoogleFonts.amiri(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: AppColors.primaryDark,
-        ),
-        headlineMedium: GoogleFonts.amiri(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: AppColors.primaryDark,
-        ),
-        bodyLarge: GoogleFonts.cairo(
-          fontSize: 16,
-          color: AppColors.darkGray,
-        ),
-        bodyMedium: GoogleFonts.cairo(
-          fontSize: 14,
-          color: AppColors.darkGray,
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          //
+          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+          // action in the IDE, or press "p" in the console), to see the
+          // wireframe for each widget.
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
         ),
       ),
-      
-      // شريط التطبيق
-      appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.primaryDark,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        titleTextStyle: GoogleFonts.amiri(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
-      
-      // البطاقات
-      cardTheme: CardTheme(
-        elevation: 4,
-        shadowColor: AppColors.primaryDark.withOpacity(0.1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
-      
-      // الأزرار المرتفعة
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryDark,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: GoogleFonts.cairo(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-      
-      // الأزرار المخططة
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primaryDark,
-          side: const BorderSide(color: AppColors.primaryDark, width: 2),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: GoogleFonts.cairo(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-      
-      // FAB
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.lightGold,
-        foregroundColor: Colors.white,
-        elevation: 6,
-      ),
-      
-      // شريط التنقل السفلي
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: AppColors.softWhite,
-        selectedItemColor: AppColors.primaryDark,
-        unselectedItemColor: AppColors.mediumGray,
-        type: BottomNavigationBarType.fixed,
-        elevation: 8,
-        selectedLabelStyle: GoogleFonts.cairo(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
-        unselectedLabelStyle: GoogleFonts.cairo(
-          fontSize: 12,
-        ),
-      ),
-      
-      // إعدادات إضافية
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-    );
-  }
-
-  // الثيم الداكن
-  ThemeData _buildDarkTheme() {
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primaryDark,
-        brightness: Brightness.dark,
-        primary: AppColors.lightGold,
-        secondary: AppColors.emeraldGreen,
-        surface: AppColors.darkSurface,
-        background: AppColors.darkBackground,
-      ),
-      
-      textTheme: GoogleFonts.cairoTextTheme(ThemeData.dark().textTheme).copyWith(
-        headlineLarge: GoogleFonts.amiri(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: AppColors.lightGold,
-        ),
-        headlineMedium: GoogleFonts.amiri(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: AppColors.lightGold,
-        ),
-        bodyLarge: GoogleFonts.cairo(
-          fontSize: 16,
-          color: AppColors.darkOnSurface,
-        ),
-        bodyMedium: GoogleFonts.cairo(
-          fontSize: 14,
-          color: AppColors.darkOnSurface,
-        ),
-      ),
-      
-      appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.darkSurface,
-        foregroundColor: AppColors.lightGold,
-        elevation: 0,
-        centerTitle: true,
-        titleTextStyle: GoogleFonts.amiri(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: AppColors.lightGold,
-        ),
-      ),
-      
-      cardTheme: CardTheme(
-        color: AppColors.darkSurface,
-        elevation: 4,
-        shadowColor: Colors.black26,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
-      
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.lightGold,
-          foregroundColor: AppColors.darkBackground,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: GoogleFonts.cairo(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-      
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.lightGold,
-          side: const BorderSide(color: AppColors.lightGold, width: 2),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: GoogleFonts.cairo(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-      
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.lightGold,
-        foregroundColor: AppColors.darkBackground,
-        elevation: 6,
-      ),
-      
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: AppColors.darkSurface,
-        selectedItemColor: AppColors.lightGold,
-        unselectedItemColor: AppColors.mediumGray,
-        type: BottomNavigationBarType.fixed,
-        elevation: 8,
-        selectedLabelStyle: GoogleFonts.cairo(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
-        unselectedLabelStyle: GoogleFonts.cairo(
-          fontSize: 12,
-        ),
-      ),
-      
-      visualDensity: VisualDensity.adaptivePlatformDensity,
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
