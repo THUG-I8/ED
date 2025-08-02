@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'providers/quran_settings_provider.dart';
 import 'screens/quran_reader_screen.dart';
 import 'screens/islamic_education_screen.dart';
+import 'screens/adhkar_screen.dart';
+import 'screens/tasbih_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -149,9 +151,11 @@ class HomeScreen extends StatelessWidget {
                         Icons.beads,
                         const Color(0xFFE74C3C),
                         () {
-                          // سيتم إضافة شاشة السبحة لاحقاً
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('قريباً - السبحة الإلكترونية')),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const TasbihScreen(),
+                            ),
                           );
                         },
                       ),
@@ -185,9 +189,11 @@ class HomeScreen extends StatelessWidget {
                         Icons.favorite,
                         const Color(0xFF9B59B6),
                         () {
-                          // سيتم إضافة شاشة الأذكار لاحقاً
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('قريباً - الأذكار')),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AdhkarScreen(),
+                            ),
                           );
                         },
                       ),
