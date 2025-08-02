@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>App Icon Generator</title>
+</head>
+<body>
+    <canvas id="iconCanvas" width="1024" height="1024"></canvas>
+    <script>
+        const canvas = document.getElementById('iconCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set background
+        ctx.fillStyle = '#2E7D32';
+        ctx.fillRect(0, 0, 1024, 1024);
+        
+        // Draw crescent moon
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(600, 400, 200, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        ctx.fillStyle = '#2E7D32';
+        ctx.beginPath();
+        ctx.arc(500, 400, 200, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Draw star
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.moveTo(300, 700);
+        ctx.lineTo(350, 650);
+        ctx.lineTo(400, 700);
+        ctx.lineTo(350, 750);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Add text
+        ctx.fillStyle = 'white';
+        ctx.font = '80px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('اعرف دينك', 512, 850);
+        
+        // Convert to data URL
+        const dataURL = canvas.toDataURL('image/png');
+        console.log('Icon generated. Data URL:', dataURL);
+    </script>
+</body>
+</html>
