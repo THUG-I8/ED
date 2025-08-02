@@ -45,6 +45,7 @@ dependencies:
   http: ^1.1.0  # للاتصال بالإنترنت
   path_provider: ^2.1.1  # لإدارة الملفات
   intl: ^0.18.1  # لتنسيق التواريخ
+  google_fonts: ^6.1.0  # للخطوط العربية
 
 dev_dependencies:
   flutter_test:

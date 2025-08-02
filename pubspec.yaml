@@ -36,8 +36,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   
   # مكتبات المصحف والقراءة
-  quran: ^1.0.0  # مكتبة القرآن الكريم
-  flutter_pdfview: ^1.3.2  # لعرض PDF
   photo_view: ^0.14.0  # للزوم والتصغير
   shared_preferences: ^2.2.2  # لحفظ الإعدادات
   provider: ^6.1.1  # لإدارة الحالة
@@ -46,6 +44,8 @@ dependencies:
   http: ^1.1.0  # للاتصال بالإنترنت
   path_provider: ^2.1.1  # لإدارة الملفات
   permission_handler: ^11.0.1  # لإدارة الصلاحيات
+  google_fonts: ^6.1.0  # للخطوط العربية
+  intl: ^0.18.1  # لتنسيق التواريخ والأرقام
 
 dev_dependencies:
   flutter_test:
