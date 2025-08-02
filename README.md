@@ -34,17 +34,12 @@ cd know_your_deen
 flutter pub get
 ```
 
-3. **تطبيق الأيقونة**
-```bash
-flutter pub run flutter_launcher_icons:main
-```
-
-4. **تشغيل التطبيق**
+3. **تشغيل التطبيق**
 ```bash
 flutter run
 ```
 
-5. **بناء APK**
+4. **بناء APK**
 ```bash
 flutter clean
 flutter build apk --release
@@ -58,6 +53,12 @@ flutter build apk --release
 - 🌙 **الهلال**: رمز إسلامي تقليدي
 - 📖 **الكتاب**: يمثل القرآن الكريم
 - 📿 **السبحة**: رمز الذكر
+
+### تطبيق الأيقونة:
+```bash
+flutter pub run flutter_launcher_icons:main
+flutter build apk --release
+```
 
 ## 📱 تحميل APK
 
@@ -84,6 +85,8 @@ flutter build apk --release
 ## 🔧 حل المشاكل
 
 إذا واجهت مشاكل في البناء، راجع:
+- [QUICK_BUILD.md](QUICK_BUILD.md) - بناء سريع
+- [MANUAL_ICON_SETUP.md](MANUAL_ICON_SETUP.md) - تطبيق الأيقونة
 - [BUILD_SOLUTION.md](BUILD_SOLUTION.md) - حل مشاكل البناء
 - [BUILD_GUIDE_FINAL.md](BUILD_GUIDE_FINAL.md) - دليل البناء النهائي
 - [BUILD_FIXES.md](BUILD_FIXES.md) - حل مشاكل البناء
