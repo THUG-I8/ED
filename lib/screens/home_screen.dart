@@ -6,6 +6,8 @@ import 'qibla_screen.dart';
 import 'adhkar_screen.dart';
 import 'islamic_education_screen.dart';
 import 'islamic_stories_screen.dart';
+import 'quran_settings_screen.dart';
+import 'surah_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -53,6 +55,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
+    final months = [
+      'يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو',
+      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+    ];
+    
+    final days = [
+      'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'
+    ];
+    
+    final dateString = '${days[now.weekday - 1]}، ${now.day} ${months[now.month - 1]} ${now.year}';
     
     return Scaffold(
       body: Container(
@@ -161,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       child: Column(
                         children: [
                           // بطاقة التاريخ
-                          _buildDateCard(now),
+                          _buildDateCard(dateString),
                           SizedBox(height: 20),
                           
                           // بطاقة الذكر اليومي
@@ -199,18 +211,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildDateCard(DateTime now) {
-    final months = [
-      'يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو',
-      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-    ];
-    
-    final days = [
-      'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'
-    ];
-    
-    final dateString = '${days[now.weekday - 1]}، ${now.day} ${months[now.month - 1]} ${now.year}';
-    
+  Widget _buildDateCard(String dateString) {
     return Container(
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -498,6 +499,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         'icon': Icons.auto_stories,
         'color': Color(0xFFC2185B),
         'route': IslamicStoriesScreen(),
+      },
+      {
+        'title': 'إعدادات القرآن',
+        'icon': Icons.settings,
+        'color': Color(0xFF607D8B),
+        'route': QuranSettingsScreen(),
       },
     ];
 
