@@ -5,14 +5,9 @@ import 'providers/quran_provider.dart';
 import 'screens/home_screen.dart';
 
 void main() {
-  // إضافة error handling
-  runZonedGuarded(() {
-    WidgetsFlutterBinding.ensureInitialized();
-    runApp(MyApp());
-  }, (error, stack) {
-    print('Error: $error');
-    print('Stack: $stack');
-  });
+  // إضافة error handling بسيط
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
