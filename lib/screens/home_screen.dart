@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-import 'package:hijri/hijri_calendar.dart';
 import 'quran_reader_screen.dart';
 import 'tasbih_screen.dart';
 import 'prayer_times_screen.dart';
@@ -56,8 +53,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    final hijri = HijriCalendar.fromDate(now);
-    final dateFormat = DateFormat('EEEE, d MMMM yyyy', 'ar');
     
     return Scaffold(
       body: Container(
@@ -126,10 +121,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           SizedBox(height: 16),
                           Text(
                             'اعرف دينك',
-                            style: GoogleFonts.cairo(
+                            style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
+                              fontFamily: 'Cairo',
                               shadows: [
                                 Shadow(
                                   offset: Offset(0, 2),
@@ -141,9 +137,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           ),
                           Text(
                             'تطبيق إسلامي شامل',
-                            style: GoogleFonts.cairo(
+                            style: TextStyle(
                               fontSize: 16,
                               color: Colors.white.withOpacity(0.9),
+                              fontFamily: 'Cairo',
                             ),
                           ),
                         ],
@@ -164,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       child: Column(
                         children: [
                           // بطاقة التاريخ
-                          _buildDateCard(dateFormat.format(now), hijri),
+                          _buildDateCard(now),
                           SizedBox(height: 20),
                           
                           // بطاقة الذكر اليومي
@@ -178,10 +175,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           // عنوان الميزات
                           Text(
                             'الميزات الرئيسية',
-                            style: GoogleFonts.cairo(
+                            style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
+                              fontFamily: 'Cairo',
                             ),
                           ),
                           SizedBox(height: 20),
@@ -201,7 +199,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildDateCard(String gregorianDate, HijriCalendar hijri) {
+  Widget _buildDateCard(DateTime now) {
+    final months = [
+      'يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو',
+      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+    ];
+    
+    final days = [
+      'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'
+    ];
+    
+    final dateString = '${days[now.weekday - 1]}، ${now.day} ${months[now.month - 1]} ${now.year}';
+    
     return Container(
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -240,19 +249,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  gregorianDate,
-                  style: GoogleFonts.cairo(
+                  dateString,
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    fontFamily: 'Cairo',
                   ),
                 ),
                 SizedBox(height: 4),
                 Text(
-                  '${hijri.hDay} ${hijri.longMonthName} ${hijri.hYear} هـ',
-                  style: GoogleFonts.cairo(
+                  'التاريخ الهجري سيظهر هنا',
+                  style: TextStyle(
                     fontSize: 14,
                     color: Colors.white.withOpacity(0.8),
+                    fontFamily: 'Cairo',
                   ),
                 ),
               ],
@@ -306,10 +317,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               Expanded(
                 child: Text(
                   'الذكر اليومي',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    fontFamily: 'Cairo',
                   ),
                 ),
               ),
@@ -318,19 +330,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           SizedBox(height: 16),
           Text(
             'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.white,
+              fontFamily: 'Cairo',
             ),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 8),
           Text(
             'سبحان الله وبحمده',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
               fontSize: 16,
               color: Colors.white.withOpacity(0.9),
+              fontFamily: 'Cairo',
             ),
             textAlign: TextAlign.center,
           ),
@@ -382,18 +396,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               Expanded(
                 child: Text(
                   'مواقيت الصلاة',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    fontFamily: 'Cairo',
                   ),
                 ),
               ),
               Text(
                 'القاهرة',
-                style: GoogleFonts.cairo(
+                style: TextStyle(
                   fontSize: 14,
                   color: Colors.white.withOpacity(0.8),
+                  fontFamily: 'Cairo',
                 ),
               ),
             ],
@@ -419,18 +435,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       children: [
         Text(
           name,
-          style: GoogleFonts.cairo(
+          style: TextStyle(
             fontSize: 12,
             color: Colors.white.withOpacity(0.8),
+            fontFamily: 'Cairo',
           ),
         ),
         SizedBox(height: 4),
         Text(
           time,
-          style: GoogleFonts.cairo(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
             color: Colors.white,
+            fontFamily: 'Cairo',
           ),
         ),
       ],
@@ -582,10 +600,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   SizedBox(height: 16),
                   Text(
                     title,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
+                      fontFamily: 'Cairo',
                     ),
                     textAlign: TextAlign.center,
                   ),
