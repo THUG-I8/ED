@@ -33,11 +33,11 @@ class FontService {
     } catch (e) {
       // في حالة الفشل، نرجع الخطوط الافتراضية
       return [
-        'Amiri',
         'Cairo',
-        'Uthmanic',
-        'KFGQPC',
-        'Scheherazade',
+        'Amiri',
+        'Noto Naskh Arabic',
+        'Noto Sans Arabic',
+        'Almarai',
       ];
     }
   }

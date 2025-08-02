@@ -1,5 +1,5 @@
 name: know_your_deen
-description: "تطبيق اعرف دينك - تطبيق إسلامي شامل للأندرويد"
+description: تطبيق اعرف دينك - تطبيق إسلامي شامل للأندرويد
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -11,14 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  
   # المكتبات الأساسية
   provider: ^6.1.1
   shared_preferences: ^2.2.2
   http: ^1.1.0
   intl: ^0.18.1
-  google_fonts: ^6.1.0
-  
+  google_fonts: ^5.1.0
   # مكتبات الميزات
   photo_view: ^0.14.0
   vibration: ^1.7.4
@@ -43,21 +41,7 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
-
+  
   assets:
     - assets/images/
     - assets/icon/
-
-  fonts:
-    - family: Cairo
-      fonts:
-        - asset: assets/fonts/Cairo-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Cairo-Bold.ttf
-          weight: 700
-    - family: Amiri
-      fonts:
-        - asset: assets/fonts/Amiri-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Amiri-Bold.ttf
-          weight: 700

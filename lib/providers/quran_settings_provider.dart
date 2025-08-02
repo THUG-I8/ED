@@ -10,7 +10,7 @@ class QuranSettingsProvider extends ChangeNotifier {
   static const String _showTranslationKey = 'quran_show_translation';
 
   // الإعدادات الافتراضية
-  String _fontFamily = 'Amiri';
+  String _fontFamily = 'Cairo';
   double _fontSize = 24.0;
   double _lineSpacing = 1.5;
   Color _backgroundColor = Colors.white;
@@ -27,11 +27,8 @@ class QuranSettingsProvider extends ChangeNotifier {
 
   // الخطوط المتاحة - محدثة مع API الجديد
   static const List<String> availableFonts = [
-    'Amiri',
     'Cairo',
-    'Uthmanic',
-    'KFGQPC',
-    'Scheherazade',
+    'Amiri',
     'Noto Naskh Arabic',
     'Noto Sans Arabic',
     'Almarai',
@@ -46,11 +43,8 @@ class QuranSettingsProvider extends ChangeNotifier {
 
   // أسماء الخطوط العربية
   static const Map<String, String> fontDisplayNames = {
-    'Amiri': 'أميري',
     'Cairo': 'القاهرة',
-    'Uthmanic': 'عثماني',
-    'KFGQPC': 'كوفي',
-    'Scheherazade': 'شهرزاد',
+    'Amiri': 'أميري',
     'Noto Naskh Arabic': 'نوتو نسخ',
     'Noto Sans Arabic': 'نوتو سانس',
     'Almarai': 'المراعي',
