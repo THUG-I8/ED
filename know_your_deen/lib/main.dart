@@ -7,6 +7,7 @@ import 'screens/adhkar_screen.dart';
 import 'screens/tasbih_screen.dart';
 import 'screens/prayer_times_screen.dart';
 import 'screens/qibla_screen.dart';
+import 'screens/islamic_stories_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -223,9 +224,11 @@ class HomeScreen extends StatelessWidget {
                          Icons.auto_stories,
                          const Color(0xFFE91E63),
                          () {
-                           // سيتم إضافة شاشة القصص لاحقاً
-                           ScaffoldMessenger.of(context).showSnackBar(
-                             const SnackBar(content: Text('قريباً - القصص الإسلامية')),
+                           Navigator.push(
+                             context,
+                             MaterialPageRoute(
+                               builder: (context) => const IslamicStoriesScreen(),
+                             ),
                            );
                          },
                        ),
