@@ -84,6 +84,7 @@ flutter build apk --release
 ## 🔧 حل المشاكل
 
 إذا واجهت مشاكل في البناء، راجع:
+- [BUILD_SOLUTION.md](BUILD_SOLUTION.md) - حل مشاكل البناء
 - [BUILD_GUIDE_FINAL.md](BUILD_GUIDE_FINAL.md) - دليل البناء النهائي
 - [BUILD_FIXES.md](BUILD_FIXES.md) - حل مشاكل البناء
 - [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - حل المشاكل الشائعة
