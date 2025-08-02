@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AdhkarScreen extends StatefulWidget {
   const AdhkarScreen({Key? key}) : super(key: key);
@@ -11,6 +13,9 @@ class _AdhkarScreenState extends State<AdhkarScreen>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+  Map<String, dynamic>? _adhkarData;
+  bool _isLoading = true;
+  String _error = '';
 
   @override
   void initState() {
@@ -27,6 +32,33 @@ class _AdhkarScreenState extends State<AdhkarScreen>
       curve: Curves.easeInOut,
     ));
     _animationController.forward();
+    _loadAdhkarData();
+  }
+
+  Future<void> _loadAdhkarData() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://raw.githubusercontent.com/nawafalqari/azkar-api/56df51279ab6eb86dc2f6202c7de26c8948331c1/azkar.json'),
+      );
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          _adhkarData = data;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _error = 'فشل في تحميل الأذكار';
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _error = 'خطأ في الاتصال: $e';
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -443,6 +475,53 @@ class _AdhkarScreenState extends State<AdhkarScreen>
   }
 
   List<Map<String, dynamic>> _getAdhkarList(String category) {
+    if (_adhkarData == null) return [];
+    
+    // تحويل اسم الفئة إلى الإنجليزية للبحث في API
+    String categoryKey = '';
+    switch (category) {
+      case 'أذكار الصباح':
+        categoryKey = 'أذكار الصباح';
+        break;
+      case 'أذكار المساء':
+        categoryKey = 'أذكار المساء';
+        break;
+      case 'أذكار النوم':
+        categoryKey = 'أذكار النوم';
+        break;
+      case 'أذكار الاستيقاظ':
+        categoryKey = 'أذكار الاستيقاظ';
+        break;
+      case 'أذكار المسجد':
+        categoryKey = 'أذكار المسجد';
+        break;
+      case 'أذكار عامة':
+        categoryKey = 'أذكار عامة';
+        break;
+      default:
+        categoryKey = category;
+    }
+    
+    // البحث في البيانات
+    if (_adhkarData!.containsKey(categoryKey)) {
+      final categoryData = _adhkarData![categoryKey] as List;
+      return categoryData.map((item) {
+        return {
+          'title': item['title'] ?? 'ذكر',
+          'arabic': item['content'] ?? '',
+          'translation': item['translation'] ?? '',
+          'count': item['count'] ?? 'مرة واحدة',
+          'benefit': item['benefit'] ?? 'ثواب عظيم',
+          'category': category,
+        };
+      }).toList();
+    }
+    
+    // إذا لم يتم العثور على البيانات، استخدم البيانات الافتراضية
+    return _getDefaultAdhkarList(category);
+  }
+
+  List<Map<String, dynamic>> _getDefaultAdhkarList(String category) {
     switch (category) {
       case 'أذكار الصباح':
         return [
@@ -461,41 +540,6 @@ class _AdhkarScreenState extends State<AdhkarScreen>
             'count': '3 مرات',
             'benefit': 'ثواب عظيم',
             'category': 'أذكار الصباح',
-          },
-          {
-            'title': 'لا إله إلا الله',
-            'arabic': 'لَا إِلَهَ إِلَّا اللَّهُ',
-            'translation': 'There is no god but Allah',
-            'count': '3 مرات',
-            'benefit': 'حماية من الشيطان',
-            'category': 'أذكار الصباح',
-          },
-          {
-            'title': 'الله أكبر',
-            'arabic': 'اللَّهُ أَكْبَرُ',
-            'translation': 'Allah is the Greatest',
-            'count': '3 مرات',
-            'benefit': 'تعظيم الله',
-            'category': 'أذكار الصباح',
-          },
-        ];
-      case 'أذكار المساء':
-        return [
-          {
-            'title': 'أعوذ بكلمات الله التامات',
-            'arabic': 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ الَّتِي لَا يُجَاوِزُهُنَّ بَرٌّ وَلَا فَاجِرٌ',
-            'translation': 'I seek refuge in Allah\'s perfect words',
-            'count': '3 مرات',
-            'benefit': 'حماية من كل شر',
-            'category': 'أذكار المساء',
-          },
-          {
-            'title': 'باسمك ربي وضعت جنبي',
-            'arabic': 'بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، فَإِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ',
-            'translation': 'In Your name, my Lord, I lay my side down',
-            'count': 'مرة واحدة',
-            'benefit': 'حماية في النوم',
-            'category': 'أذكار المساء',
           },
         ];
       default:

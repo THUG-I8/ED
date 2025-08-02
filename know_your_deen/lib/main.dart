@@ -5,6 +5,8 @@ import 'screens/quran_reader_screen.dart';
 import 'screens/islamic_education_screen.dart';
 import 'screens/adhkar_screen.dart';
 import 'screens/tasbih_screen.dart';
+import 'screens/prayer_times_screen.dart';
+import 'screens/qibla_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -165,9 +167,11 @@ class HomeScreen extends StatelessWidget {
                         Icons.access_time,
                         const Color(0xFF2ECC71),
                         () {
-                          // سيتم إضافة شاشة مواقيت الصلاة لاحقاً
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('قريباً - مواقيت الصلاة')),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PrayerTimesScreen(),
+                            ),
                           );
                         },
                       ),
@@ -177,9 +181,11 @@ class HomeScreen extends StatelessWidget {
                         Icons.explore,
                         const Color(0xFFF39C12),
                         () {
-                          // سيتم إضافة شاشة اتجاه القبلة لاحقاً
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('قريباً - اتجاه القبلة')),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const QiblaScreen(),
+                            ),
                           );
                         },
                       ),
