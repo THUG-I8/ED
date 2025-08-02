@@ -7,11 +7,11 @@
     <application
         android:label="اعرف دينك"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
         android:largeHeap="true"
         android:hardwareAccelerated="true"
         android:allowBackup="true"
         android:fullBackupContent="true">
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -22,15 +22,18 @@
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
             android:resizeableActivity="false">
+            
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+              
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
