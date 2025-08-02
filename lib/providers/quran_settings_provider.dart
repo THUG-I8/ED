@@ -25,14 +25,43 @@ class QuranSettingsProvider extends ChangeNotifier {
   Color get textColor => _textColor;
   bool get showTranslation => _showTranslation;
 
-  // الخطوط المتاحة
+  // الخطوط المتاحة - محدثة مع API الجديد
   static const List<String> availableFonts = [
     'Amiri',
     'Cairo',
     'Uthmanic',
     'KFGQPC',
     'Scheherazade',
+    'Noto Naskh Arabic',
+    'Noto Sans Arabic',
+    'Almarai',
+    'Tajawal',
+    'Reem Kufi',
+    'Harmattan',
+    'Lateef',
+    'Aref Ruqaa',
+    'Changa',
+    'IBM Plex Sans Arabic',
   ];
+
+  // أسماء الخطوط العربية
+  static const Map<String, String> fontDisplayNames = {
+    'Amiri': 'أميري',
+    'Cairo': 'القاهرة',
+    'Uthmanic': 'عثماني',
+    'KFGQPC': 'كوفي',
+    'Scheherazade': 'شهرزاد',
+    'Noto Naskh Arabic': 'نوتو نسخ',
+    'Noto Sans Arabic': 'نوتو سانس',
+    'Almarai': 'المراعي',
+    'Tajawal': 'تجوال',
+    'Reem Kufi': 'ريم كوفي',
+    'Harmattan': 'حرتان',
+    'Lateef': 'لطيف',
+    'Aref Ruqaa': 'عارف رقعة',
+    'Changa': 'تشانجا',
+    'IBM Plex Sans Arabic': 'آي بي إم بلكس',
+  };
 
   // الألوان المتاحة
   static const List<Color> availableColors = [

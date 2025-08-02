@@ -1,8 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/quran_settings_provider.dart';
+import '../services/font_service.dart';
 
-class QuranSettingsScreen extends StatelessWidget {
+class QuranSettingsScreen extends StatefulWidget {
+  @override
+  _QuranSettingsScreenState createState() => _QuranSettingsScreenState();
+}
+
+class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
+  List<String> _availableFonts = [];
+  bool _isLoadingFonts = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFonts();
+  }
+
+  Future<void> _loadFonts() async {
+    try {
+      final fonts = await FontService.getAvailableFonts();
+      setState(() {
+        _availableFonts = fonts;
+        _isLoadingFonts = false;
+      });
+    } catch (e) {
+      setState(() {
+        _availableFonts = QuranSettingsProvider.availableFonts;
+        _isLoadingFonts = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,21 +48,30 @@ class QuranSettingsScreen extends StatelessWidget {
               // نوع الخط
               _buildSection(
                 'نوع الخط',
-                DropdownButton<String>(
-                  value: settings.fontFamily,
-                  isExpanded: true,
-                  items: QuranSettingsProvider.availableFonts.map((font) {
-                    return DropdownMenuItem(
-                      value: font,
-                      child: Text(font),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      settings.setFontFamily(value);
-                    }
-                  },
-                ),
+                _isLoadingFonts
+                    ? Center(child: CircularProgressIndicator())
+                    : DropdownButton<String>(
+                        value: settings.fontFamily,
+                        isExpanded: true,
+                        items: _availableFonts.map((font) {
+                          final displayName = QuranSettingsProvider.fontDisplayNames[font] ?? font;
+                          return DropdownMenuItem(
+                            value: font,
+                            child: Text(
+                              displayName,
+                              style: TextStyle(
+                                fontFamily: font,
+                                fontSize: 16,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            settings.setFontFamily(value);
+                          }
+                        },
+                      ),
               ),
               
               SizedBox(height: 20),
