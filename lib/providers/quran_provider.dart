@@ -89,25 +89,6 @@ class QuranProvider extends ChangeNotifier {
     }
   }
 
-  void goToVerse(int surahNumber, int verseNumber) {
-    if (surahNumber >= 1 && surahNumber <= QuranService.getTotalSurahs()) {
-      _currentSurah = surahNumber;
-      _currentVerse = verseNumber;
-      
-      // Find the page containing this verse
-      final surah = QuranService.getSurahByNumber(_surahs, surahNumber);
-      if (surah != null) {
-        final verse = surah.verses.firstWhere(
-          (v) => v.number == verseNumber,
-          orElse: () => surah.verses.first,
-        );
-        _currentPage = verse.page;
-      }
-      
-      notifyListeners();
-    }
-  }
-
   void nextPage() {
     if (_currentPage < QuranService.getTotalPages()) {
       goToPage(_currentPage + 1);
@@ -149,27 +130,9 @@ class QuranProvider extends ChangeNotifier {
     }).toList();
   }
 
-  List<Verse> searchVerses(String query) {
-    if (query.isEmpty) return [];
-    
-    List<Verse> results = [];
-    for (var surah in _surahs) {
-      for (var verse in surah.verses) {
-        if (verse.text.ar.contains(query) ||
-            verse.text.en.toLowerCase().contains(query.toLowerCase())) {
-          results.add(verse);
-        }
-      }
-    }
-    return results;
-  }
-
-  // Bookmark methods (placeholder for future implementation)
+  // Bookmark methods
   List<int> _bookmarkedPages = [];
-  List<int> _bookmarkedVerses = [];
-
   List<int> get bookmarkedPages => _bookmarkedPages;
-  List<int> get bookmarkedVerses => _bookmarkedVerses;
 
   void togglePageBookmark(int page) {
     if (_bookmarkedPages.contains(page)) {
@@ -180,22 +143,7 @@ class QuranProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleVerseBookmark(int surahNumber, int verseNumber) {
-    final verseId = surahNumber * 1000 + verseNumber;
-    if (_bookmarkedVerses.contains(verseId)) {
-      _bookmarkedVerses.remove(verseId);
-    } else {
-      _bookmarkedVerses.add(verseId);
-    }
-    notifyListeners();
-  }
-
   bool isPageBookmarked(int page) {
     return _bookmarkedPages.contains(page);
-  }
-
-  bool isVerseBookmarked(int surahNumber, int verseNumber) {
-    final verseId = surahNumber * 1000 + verseNumber;
-    return _bookmarkedVerses.contains(verseId);
   }
 }

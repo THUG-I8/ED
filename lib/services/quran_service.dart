@@ -72,11 +72,6 @@ class QuranService {
     }
   }
 
-  static List<Verse> getVersesForSurah(List<Surah> surahs, int surahNumber) {
-    final surah = getSurahByNumber(surahs, surahNumber);
-    return surah?.verses ?? [];
-  }
-
   static int getTotalPages() {
     return 604; // إجمالي صفحات القرآن
   }

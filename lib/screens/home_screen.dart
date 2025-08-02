@@ -1,278 +1,232 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-import '../constants/app_colors.dart';
-import '../constants/app_strings.dart';
-import '../providers/story_provider.dart';
-import '../providers/dhikr_provider.dart';
-import '../providers/prayer_time_provider.dart';
-import '../providers/settings_provider.dart';
-import '../widgets/daily_story_card.dart';
-import '../widgets/quick_access_grid.dart';
-import '../widgets/prayer_times_widget.dart';
-import '../widgets/daily_dhikr_card.dart';
+import 'quran_reader_screen.dart';
+import 'tasbih_screen.dart';
+import 'prayer_times_screen.dart';
+import 'qibla_screen.dart';
+import 'adhkar_screen.dart';
+import 'islamic_education_screen.dart';
+import 'islamic_stories_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final padding = MediaQuery.of(context).padding;
-    
     return Scaffold(
+      appBar: AppBar(
+        title: Text('اعرف دينك'),
+        centerTitle: true,
+      ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppColors.primaryDark,
-              AppColors.softWhite,
+              Colors.green[700]!,
+              Colors.green[50]!,
             ],
-            stops: [0.0, 0.3],
           ),
         ),
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            // App Bar مخصص
-            _buildCustomAppBar(padding),
-            
-            // المحتوى الرئيسي
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // رسالة الترحيب
-                    _buildWelcomeMessage(),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // بطاقة القصة اليومية
-                    const DailyStoryCard(),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // ذكر اليوم
-                    const DailyDhikrCard(),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // مواقيت الصلاة
-                    const PrayerTimesWidget(),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // الوصول السريع
-                    _buildSectionTitle(AppStrings.quickAccess),
-                    const SizedBox(height: 16),
-                    const QuickAccessGrid(),
-                    
-                    const SizedBox(height: 32),
-                  ],
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                // شعار التطبيق
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(60),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.mosque,
+                    size: 60,
+                    color: Colors.green[700],
+                  ),
                 ),
+                
+                SizedBox(height: 20),
+                
+                Text(
+                  'اعرف دينك',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                
+                Text(
+                  'تطبيق إسلامي شامل',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                ),
+                
+                SizedBox(height: 40),
+                
+                // شبكة الميزات
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 1.1,
+                    children: [
+                      _buildFeatureCard(
+                        context,
+                        'المصحف الشريف',
+                        Icons.book,
+                        Colors.green[700]!,
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => QuranReaderScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        'السبحة الإلكترونية',
+                        Icons.radio_button_checked,
+                        Colors.blue[700]!,
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TasbihScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        'مواقيت الصلاة',
+                        Icons.schedule,
+                        Colors.orange[700]!,
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PrayerTimesScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        'اتجاه القبلة',
+                        Icons.explore,
+                        Colors.purple[700]!,
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => QiblaScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        'الأذكار',
+                        Icons.auto_awesome,
+                        Colors.teal[700]!,
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AdhkarScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        'التعليم الإسلامي',
+                        Icons.school,
+                        Colors.indigo[700]!,
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => IslamicEducationScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        'القصص الإسلامية',
+                        Icons.auto_stories,
+                        Colors.pink[700]!,
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => IslamicStoriesScreen(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureCard(
+    BuildContext context,
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.2),
+              blurRadius: 10,
+              offset: Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(30),
               ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 30,
+              ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
       ),
     );
-  }
-
-  Widget _buildCustomAppBar(EdgeInsets padding) {
-    return SliverAppBar(
-      expandedHeight: 120,
-      floating: false,
-      pinned: true,
-      backgroundColor: AppColors.primaryDark,
-      elevation: 0,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          decoration: const BoxDecoration(
-            gradient: AppColors.primaryGradient,
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppStrings.appName,
-                            style: GoogleFonts.amiri(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.lightGold,
-                            ),
-                          ),
-                          Text(
-                            _getGreetingMessage(),
-                            style: GoogleFonts.cairo(
-                              fontSize: 14,
-                              color: AppColors.sandyBeige,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Consumer<SettingsProvider>(
-                        builder: (context, settings, child) {
-                          return IconButton(
-                            onPressed: () {
-                              settings.toggleDarkMode();
-                            },
-                            icon: Icon(
-                              settings.isDarkMode 
-                                  ? Icons.light_mode_rounded
-                                  : Icons.dark_mode_rounded,
-                              color: AppColors.lightGold,
-                              size: 24,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildWelcomeMessage() {
-    return Consumer<PrayerTimeProvider>(
-      builder: (context, prayerProvider, child) {
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            gradient: AppColors.cardGradient,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: AppColors.cardShadow,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    _getTimeIcon(),
-                    color: AppColors.primaryDark,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _getGreetingMessage(),
-                          style: GoogleFonts.cairo(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primaryDark,
-                          ),
-                        ),
-                        Text(
-                          _getCurrentDate(),
-                          style: GoogleFonts.cairo(
-                            fontSize: 14,
-                            color: AppColors.mediumGray,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                _getMotivationalMessage(),
-                style: GoogleFonts.cairo(
-                  fontSize: 16,
-                  color: AppColors.darkGray,
-                  height: 1.5,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: GoogleFonts.amiri(
-        fontSize: 22,
-        fontWeight: FontWeight.bold,
-        color: AppColors.primaryDark,
-      ),
-    );
-  }
-
-  String _getGreetingMessage() {
-    final hour = DateTime.now().hour;
-    if (hour < 12) {
-      return AppStrings.goodMorning;
-    } else if (hour < 18) {
-      return 'أهلاً وسهلاً';
-    } else {
-      return AppStrings.goodEvening;
-    }
-  }
-
-  IconData _getTimeIcon() {
-    final hour = DateTime.now().hour;
-    if (hour < 6 || hour > 18) {
-      return Icons.nightlight_round;
-    } else if (hour < 12) {
-      return Icons.wb_sunny_rounded;
-    } else {
-      return Icons.wb_sunny_outlined;
-    }
-  }
-
-  String _getCurrentDate() {
-    final now = DateTime.now();
-    final formatter = DateFormat('EEEE، d MMMM yyyy', 'ar');
-    final hijriDate = context.read<PrayerTimeProvider>().getHijriDate();
-    return '${formatter.format(now)} • $hijriDate';
-  }
-
-  String _getMotivationalMessage() {
-    final messages = AppStrings.motivationalMessages;
-    final today = DateTime.now();
-    final dayOfYear = today.difference(DateTime(today.year, 1, 1)).inDays;
-    final messageIndex = dayOfYear % messages.length;
-    return messages[messageIndex];
   }
 }
