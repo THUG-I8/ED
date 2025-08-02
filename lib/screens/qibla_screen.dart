@@ -114,8 +114,8 @@ class QiblaScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey[600],
-                          textAlign: TextAlign.center,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 16),
                       ElevatedButton(

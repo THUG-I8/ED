@@ -5,12 +5,11 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.6 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
   
   # المكتبات الأساسية
@@ -31,39 +30,34 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#2E7D32"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/
-    - assets/fonts/
+    - assets/icon/
 
   fonts:
-    - family: Uthmanic
+    - family: Cairo
       fonts:
-        - asset: assets/fonts/UthmanicHafs1Ver18.ttf
+        - asset: assets/fonts/Cairo-Regular.ttf
           weight: 400
-    - family: KFGQPC
-      fonts:
-        - asset: assets/fonts/KFGQPC_Uthman_Taha_Naskh.ttf
-          weight: 400
-    - family: Scheherazade
-      fonts:
-        - asset: assets/fonts/Scheherazade-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Scheherazade-Bold.ttf
+        - asset: assets/fonts/Cairo-Bold.ttf
           weight: 700
     - family: Amiri
       fonts:
         - asset: assets/fonts/Amiri-Regular.ttf
           weight: 400
         - asset: assets/fonts/Amiri-Bold.ttf
-          weight: 700
-    - family: Cairo
-      fonts:
-        - asset: assets/fonts/Cairo-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Cairo-Bold.ttf
           weight: 700

@@ -94,7 +94,7 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
                       return _buildErrorState(quranProvider.error!);
                     }
                     
-                    if (quranProvider.quranData == null || quranProvider.quranData!.surah.isEmpty) {
+                    if (quranProvider.surahs.isEmpty) {
                       return _buildEmptyState();
                     }
                     
@@ -124,9 +124,9 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
                                   _currentPage = page;
                                 });
                               },
-                              itemCount: quranProvider.quranData!.surah.length,
+                              itemCount: quranProvider.surahs.length,
                               itemBuilder: (context, index) {
-                                final surah = quranProvider.quranData!.surah[index];
+                                final surah = quranProvider.surahs[index];
                                 return _buildSurahPage(surah, settings);
                               },
                             ),
@@ -373,7 +373,7 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
             child: Column(
               children: [
                 Text(
-                  surah.name,
+                  surah.name.ar,
                   style: GoogleFonts.cairo(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -382,7 +382,7 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
                 ),
                 SizedBox(height: 8),
                 Text(
-                  '${surah.numberOfAyahs} آية',
+                  '${surah.verses.length} آية',
                   style: GoogleFonts.cairo(
                     fontSize: 16,
                     color: Colors.white.withOpacity(0.8),
@@ -391,7 +391,7 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
                 if (surah.revelationPlace != null) ...[
                   SizedBox(height: 4),
                   Text(
-                    surah.revelationPlace!.name,
+                    surah.revelationPlace!.ar,
                     style: GoogleFonts.cairo(
                       fontSize: 14,
                       color: Colors.white.withOpacity(0.7),
@@ -405,15 +405,15 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
           SizedBox(height: 20),
           
           // آيات السورة
-          if (surah.ayah != null) ...[
-            ...surah.ayah!.map((ayah) => _buildAyahWidget(ayah, settings)),
+          if (surah.verses.isNotEmpty) ...[
+            ...surah.verses.map((verse) => _buildVerseWidget(verse, settings)),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildAyahWidget(Ayah ayah, QuranSettingsProvider settings) {
+  Widget _buildVerseWidget(Verse verse, QuranSettingsProvider settings) {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       padding: EdgeInsets.all(16),
@@ -436,7 +436,7 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              '${ayah.numberInSurah}',
+              '${verse.number}',
               style: GoogleFonts.cairo(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -448,22 +448,19 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
           SizedBox(height: 12),
           
           // نص الآية
-          if (ayah.text != null) ...[
-            Text(
-              ayah.text!.arab,
-              style: GoogleFonts.cairo(
-                fontFamily: settings.fontFamily,
-                fontSize: settings.fontSize,
-                color: settings.textColor,
-                height: settings.lineSpacing,
-              ),
-              textDirection: TextDirection.rtl,
-              textAlign: TextAlign.justify,
+          Text(
+            verse.text.ar,
+            style: GoogleFonts.cairo(
+              fontSize: settings.fontSize,
+              color: settings.textColor,
+              height: settings.lineSpacing,
             ),
-          ],
+            textDirection: TextDirection.rtl,
+            textAlign: TextAlign.justify,
+          ),
           
           // الترجمة
-          if (settings.showTranslation && ayah.text != null && ayah.text!.translation != null) ...[
+          if (settings.showTranslation) ...[
             SizedBox(height: 12),
             Container(
               padding: EdgeInsets.all(12),
@@ -472,7 +469,7 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                ayah.text!.translation!.en,
+                verse.text.en,
                 style: GoogleFonts.cairo(
                   fontSize: settings.fontSize * 0.8,
                   color: Colors.grey[600],
@@ -512,9 +509,9 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
           ),
           Consumer<QuranProvider>(
             builder: (context, quranProvider, child) {
-              if (quranProvider.quranData == null) return SizedBox();
+              if (quranProvider.surahs.isEmpty) return SizedBox();
               return Text(
-                '${_currentPage + 1} / ${quranProvider.quranData!.surah.length}',
+                '${_currentPage + 1} / ${quranProvider.surahs.length}',
                 style: GoogleFonts.cairo(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -528,14 +525,14 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> with TickerProvid
             onPressed: () {
               Consumer<QuranProvider>(
                 builder: (context, quranProvider, child) {
-                  if (quranProvider.quranData == null) return null;
-                  if (_currentPage < quranProvider.quranData!.surah.length - 1) {
+                  if (quranProvider.surahs.isEmpty) return SizedBox();
+                  if (_currentPage < quranProvider.surahs.length - 1) {
                     _pageController.nextPage(
                       duration: Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
                     );
                   }
-                  return null;
+                  return SizedBox();
                 },
               );
             },

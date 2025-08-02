@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PrayerTimesScreen extends StatelessWidget {
   @override
@@ -87,8 +88,8 @@ class PrayerTimesScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[700],
-                      textAlign: TextAlign.center,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
