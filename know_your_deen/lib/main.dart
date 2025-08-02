@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/quran_settings_provider.dart';
 import 'screens/quran_reader_screen.dart';
+import 'screens/islamic_education_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -190,18 +191,32 @@ class HomeScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      _buildFeatureCard(
-                        context,
-                        'القصص الإسلامية',
-                        Icons.auto_stories,
-                        const Color(0xFF1ABC9C),
-                        () {
-                          // سيتم إضافة شاشة القصص لاحقاً
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('قريباً - القصص الإسلامية')),
-                          );
-                        },
-                      ),
+                                             _buildFeatureCard(
+                         context,
+                         'التعليم الإسلامي',
+                         Icons.school,
+                         const Color(0xFF1ABC9C),
+                         () {
+                           Navigator.push(
+                             context,
+                             MaterialPageRoute(
+                               builder: (context) => const IslamicEducationScreen(),
+                             ),
+                           );
+                         },
+                       ),
+                       _buildFeatureCard(
+                         context,
+                         'القصص الإسلامية',
+                         Icons.auto_stories,
+                         const Color(0xFFE91E63),
+                         () {
+                           // سيتم إضافة شاشة القصص لاحقاً
+                           ScaffoldMessenger.of(context).showSnackBar(
+                             const SnackBar(content: Text('قريباً - القصص الإسلامية')),
+                           );
+                         },
+                       ),
                     ],
                   ),
                 ),
