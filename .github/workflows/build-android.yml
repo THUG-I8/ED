@@ -1,0 +1,51 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, cursor/update-upload-artifact-action-to-v4-9c37 ]
+  pull_request:
+    branches: [ main, cursor/update-upload-artifact-action-to-v4-9c37 ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.16.9'
+        channel: 'stable'
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Create app icon
+      run: flutter pub run flutter_launcher_icons:main
+      
+    - name: Build APK
+      run: flutter build apk --release
+      
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-release
+        path: build/app/outputs/flutter-apk/app-release.apk
+        
+    - name: Build App Bundle
+      run: flutter build appbundle --release
+      
+    - name: Upload App Bundle
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-bundle
+        path: build/app/outputs/bundle/release/app-release.aab
