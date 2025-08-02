@@ -45,10 +45,11 @@ android {
         applicationId "com.islamicapp.know_your_deen"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21 // Android 5.0 - يدعم الأجهزة القديمة
+        targetSdkVersion 34 // Android 14
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true // لتحسين الأداء على الأجهزة الضعيفة
     }
 
     buildTypes {
@@ -56,6 +57,13 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+            minifyEnabled true // تقليل حجم التطبيق
+            shrinkResources true // إزالة الموارد غير المستخدمة
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
         }
     }
 }

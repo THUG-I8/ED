@@ -31,17 +31,26 @@ jobs:
       run: flutter pub get
       
     - name: 🔧 Build APK
-      run: flutter build apk --release --target-platform android-arm64
+      run: flutter build apk --release --target-platform android-arm64 --split-per-abi
+      
+    - name: 🔧 Build APK for weak devices
+      run: flutter build apk --release --target-platform android-arm --split-per-abi
       
     - name: 🏷️ Get version
       id: version
       run: echo "version=$(grep 'version:' pubspec.yaml | cut -d ' ' -f 2 | cut -d '+' -f 1)" >> $GITHUB_OUTPUT
       
-    - name: 📤 Upload APK
+    - name: 📤 Upload APK (ARM64)
       uses: actions/upload-artifact@v4
       with:
-        name: know-your-deen-v${{ steps.version.outputs.version }}
-        path: build/app/outputs/flutter-apk/app-release.apk
+        name: know-your-deen-v${{ steps.version.outputs.version }}-arm64
+        path: build/app/outputs/flutter-apk/app-arm64-release.apk
+        
+    - name: 📤 Upload APK (ARM - للأجهزة الضعيفة)
+      uses: actions/upload-artifact@v4
+      with:
+        name: know-your-deen-v${{ steps.version.outputs.version }}-arm
+        path: build/app/outputs/flutter-apk/app-arm-release.apk
         
     - name: 🚀 Create Release
       if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
@@ -61,14 +70,23 @@ jobs:
           - 🎨 تصميم إسلامي جميل
           
           ### 📱 التحميل:
-          حمل الملف `app-release.apk` وثبته على جهازك
+          - **للأجهزة الحديثة (ARM64)**: حمل `app-arm64-release.apk`
+          - **للأجهزة الضعيفة والقديمة (ARM)**: حمل `app-arm-release.apk`
           
           ### 🔒 ملاحظة الأمان:
           قد تحتاج لتفعيل "تثبيت من مصادر غير معروفة" في الإعدادات
           
+          ### 📊 تحسينات الأداء:
+          - ✅ محسن للأجهزة الضعيفة
+          - ✅ يدعم Android 5.0 وما فوق
+          - ✅ حجم ملفات محسن
+          - ✅ أداء محسن للذاكرة
+          
           ---
           **بارك الله فيكم ونفع بهذا التطبيق 🤲**
-        files: build/app/outputs/flutter-apk/app-release.apk
+        files: |
+          build/app/outputs/flutter-apk/app-arm64-release.apk
+          build/app/outputs/flutter-apk/app-arm-release.apk
         draft: false
         prerelease: false
       env:
