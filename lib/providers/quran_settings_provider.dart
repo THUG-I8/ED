@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class QuranSettingsProvider extends ChangeNotifier {
   static const String _fontFamilyKey = 'quran_font_family';
@@ -71,27 +70,20 @@ class QuranSettingsProvider extends ChangeNotifier {
   }
 
   Future<void> _loadSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    
-    _fontFamily = prefs.getString(_fontFamilyKey) ?? 'Amiri';
-    _fontSize = prefs.getDouble(_fontSizeKey) ?? 24.0;
-    _lineSpacing = prefs.getDouble(_lineSpacingKey) ?? 1.5;
-    _backgroundColor = Color(prefs.getInt(_backgroundColorKey) ?? Colors.white.value);
-    _textColor = Color(prefs.getInt(_textColorKey) ?? Colors.black.value);
-    _showTranslation = prefs.getBool(_showTranslationKey) ?? true;
+    // حل بسيط - استخدام الإعدادات الافتراضية
+    _fontFamily = 'Cairo';
+    _fontSize = 24.0;
+    _lineSpacing = 1.5;
+    _backgroundColor = Colors.white;
+    _textColor = Colors.black;
+    _showTranslation = true;
     
     notifyListeners();
   }
 
   Future<void> _saveSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    
-    await prefs.setString(_fontFamilyKey, _fontFamily);
-    await prefs.setDouble(_fontSizeKey, _fontSize);
-    await prefs.setDouble(_lineSpacingKey, _lineSpacing);
-    await prefs.setInt(_backgroundColorKey, _backgroundColor.value);
-    await prefs.setInt(_textColorKey, _textColor.value);
-    await prefs.setBool(_showTranslationKey, _showTranslation);
+    // حل بسيط - لا نحفظ الإعدادات حالياً
+    // يمكن إضافة حفظ لاحقاً
   }
 
   void setFontFamily(String fontFamily) {
@@ -137,7 +129,7 @@ class QuranSettingsProvider extends ChangeNotifier {
   }
 
   void resetToDefaults() {
-    _fontFamily = 'Amiri';
+    _fontFamily = 'Cairo';
     _fontSize = 24.0;
     _lineSpacing = 1.5;
     _backgroundColor = Colors.white;

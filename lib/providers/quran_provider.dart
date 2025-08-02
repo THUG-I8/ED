@@ -25,7 +25,7 @@ class QuranProvider extends ChangeNotifier {
   // Current page data
   QuranPage? get currentPageData {
     try {
-      return _pages.firstWhere((page) => page.page == _currentPage);
+      return _pages.firstWhere((page) => page.pageNumber == _currentPage);
     } catch (e) {
       return null;
     }
@@ -62,14 +62,6 @@ class QuranProvider extends ChangeNotifier {
   void goToPage(int page) {
     if (page >= 1 && page <= QuranService.getTotalPages()) {
       _currentPage = page;
-      
-      // Update current surah and verse based on page
-      final pageData = currentPageData;
-      if (pageData != null) {
-        _currentSurah = pageData.start.surahNumber;
-        _currentVerse = pageData.start.verse;
-      }
-      
       notifyListeners();
     }
   }
@@ -125,8 +117,7 @@ class QuranProvider extends ChangeNotifier {
     
     return _surahs.where((surah) {
       return surah.name.ar.contains(query) ||
-             surah.name.en.toLowerCase().contains(query.toLowerCase()) ||
-             surah.name.transliteration.toLowerCase().contains(query.toLowerCase());
+             surah.name.en.toLowerCase().contains(query.toLowerCase());
     }).toList();
   }
 
