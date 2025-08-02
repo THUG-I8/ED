@@ -46,6 +46,10 @@ dependencies:
   path_provider: ^2.1.1  # لإدارة الملفات
   intl: ^0.18.1  # لتنسيق التواريخ
   google_fonts: ^6.1.0  # للخطوط العربية
+  vibration: ^1.7.4
+  geolocator: ^10.0.1
+  adhan: ^2.0.0
+  hijri: ^3.0.0
 
 dev_dependencies:
   flutter_test:
