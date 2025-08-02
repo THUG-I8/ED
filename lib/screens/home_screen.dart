@@ -1,278 +1,619 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-import '../constants/app_colors.dart';
-import '../constants/app_strings.dart';
-import '../providers/story_provider.dart';
-import '../providers/dhikr_provider.dart';
-import '../providers/prayer_time_provider.dart';
-import '../providers/settings_provider.dart';
-import '../widgets/daily_story_card.dart';
-import '../widgets/quick_access_grid.dart';
-import '../widgets/prayer_times_widget.dart';
-import '../widgets/daily_dhikr_card.dart';
+import 'quran_reader_screen.dart';
+import 'tasbih_screen.dart';
+import 'prayer_times_screen.dart';
+import 'qibla_screen.dart';
+import 'adhkar_screen.dart';
+import 'islamic_education_screen.dart';
+import 'islamic_stories_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final ScrollController _scrollController = ScrollController();
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 1500),
+      vsync: this,
+    );
+    
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutBack,
+    ));
+    
+    _animationController.forward();
+  }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final padding = MediaQuery.of(context).padding;
+    final now = DateTime.now();
     
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppColors.primaryDark,
-              AppColors.softWhite,
+              Color(0xFF1B5E20),
+              Color(0xFF2E7D32),
+              Color(0xFF388E3C),
+              Color(0xFF4CAF50),
+              Color(0xFF81C784),
             ],
-            stops: [0.0, 0.3],
+            stops: [0.0, 0.2, 0.4, 0.7, 1.0],
           ),
         ),
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            // App Bar مخصص
-            _buildCustomAppBar(padding),
-            
-            // المحتوى الرئيسي
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // رسالة الترحيب
-                    _buildWelcomeMessage(),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // بطاقة القصة اليومية
-                    const DailyStoryCard(),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // ذكر اليوم
-                    const DailyDhikrCard(),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // مواقيت الصلاة
-                    const PrayerTimesWidget(),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // الوصول السريع
-                    _buildSectionTitle(AppStrings.quickAccess),
-                    const SizedBox(height: 16),
-                    const QuickAccessGrid(),
-                    
-                    const SizedBox(height: 32),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCustomAppBar(EdgeInsets padding) {
-    return SliverAppBar(
-      expandedHeight: 120,
-      floating: false,
-      pinned: true,
-      backgroundColor: AppColors.primaryDark,
-      elevation: 0,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          decoration: const BoxDecoration(
-            gradient: AppColors.primaryGradient,
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        child: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              // App Bar مخصص
+              SliverAppBar(
+                expandedHeight: 200,
+                floating: false,
+                pinned: true,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          // شعار التطبيق المتحرك
+                          TweenAnimationBuilder<double>(
+                            duration: Duration(milliseconds: 1000),
+                            tween: Tween(begin: 0.0, end: 1.0),
+                            builder: (context, value, child) {
+                              return Transform.scale(
+                                scale: value,
+                                child: Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(50),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.3),
+                                        blurRadius: 20,
+                                        offset: Offset(0, 10),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Icon(
+                                    Icons.mosque,
+                                    size: 50,
+                                    color: Color(0xFF2E7D32),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: 16),
                           Text(
-                            AppStrings.appName,
-                            style: GoogleFonts.amiri(
-                              fontSize: 24,
+                            'اعرف دينك',
+                            style: TextStyle(
+                              fontSize: 28,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.lightGold,
+                              color: Colors.white,
+                              fontFamily: 'Cairo',
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(0, 2),
+                                  blurRadius: 4,
+                                  color: Colors.black.withOpacity(0.3),
+                                ),
+                              ],
                             ),
                           ),
                           Text(
-                            _getGreetingMessage(),
-                            style: GoogleFonts.cairo(
-                              fontSize: 14,
-                              color: AppColors.sandyBeige,
+                            'تطبيق إسلامي شامل',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white.withOpacity(0.9),
+                              fontFamily: 'Cairo',
                             ),
                           ),
                         ],
                       ),
-                      Consumer<SettingsProvider>(
-                        builder: (context, settings, child) {
-                          return IconButton(
-                            onPressed: () {
-                              settings.toggleDarkMode();
-                            },
-                            icon: Icon(
-                              settings.isDarkMode 
-                                  ? Icons.light_mode_rounded
-                                  : Icons.dark_mode_rounded,
-                              color: AppColors.lightGold,
-                              size: 24,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                ],
+                ),
               ),
-            ),
+              
+              // المحتوى الرئيسي
+              SliverToBoxAdapter(
+                child: SlideTransition(
+                  position: _slideAnimation,
+                  child: FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          // بطاقة التاريخ
+                          _buildDateCard(now),
+                          SizedBox(height: 20),
+                          
+                          // بطاقة الذكر اليومي
+                          _buildDailyDhikrCard(),
+                          SizedBox(height: 20),
+                          
+                          // بطاقة مواقيت الصلاة
+                          _buildPrayerTimesCard(),
+                          SizedBox(height: 30),
+                          
+                          // عنوان الميزات
+                          Text(
+                            'الميزات الرئيسية',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: 'Cairo',
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          
+                          // شبكة الميزات
+                          _buildFeaturesGrid(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildWelcomeMessage() {
-    return Consumer<PrayerTimeProvider>(
-      builder: (context, prayerProvider, child) {
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            gradient: AppColors.cardGradient,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: AppColors.cardShadow,
+  Widget _buildDateCard(DateTime now) {
+    final months = [
+      'يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو',
+      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+    ];
+    
+    final days = [
+      'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'
+    ];
+    
+    final dateString = '${days[now.weekday - 1]}، ${now.day} ${months[now.month - 1]} ${now.year}';
+    
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.2),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: Offset(0, 5),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Icon(
+              Icons.calendar_today,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  dateString,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'Cairo',
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'التاريخ الهجري سيظهر هنا',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.8),
+                    fontFamily: 'Cairo',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDailyDhikrCard() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF1565C0),
+            Color(0xFF1976D2),
+            Color(0xFF42A5F5),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFF1565C0).withOpacity(0.3),
+            blurRadius: 15,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Icon(
-                    _getTimeIcon(),
-                    color: AppColors.primaryDark,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _getGreetingMessage(),
-                          style: GoogleFonts.cairo(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primaryDark,
-                          ),
-                        ),
-                        Text(
-                          _getCurrentDate(),
-                          style: GoogleFonts.cairo(
-                            fontSize: 14,
-                            color: AppColors.mediumGray,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Icon(
+                  Icons.auto_awesome,
+                  color: Colors.white,
+                  size: 25,
+                ),
               ),
-              const SizedBox(height: 12),
-              Text(
-                _getMotivationalMessage(),
-                style: GoogleFonts.cairo(
-                  fontSize: 16,
-                  color: AppColors.darkGray,
-                  height: 1.5,
+              SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  'الذكر اليومي',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'Cairo',
+                  ),
                 ),
               ),
             ],
+          ),
+          SizedBox(height: 16),
+          Text(
+            'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: 'Cairo',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8),
+          Text(
+            'سبحان الله وبحمده',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white.withOpacity(0.9),
+              fontFamily: 'Cairo',
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPrayerTimesCard() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFE65100),
+            Color(0xFFF57C00),
+            Color(0xFFFF9800),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFFE65100).withOpacity(0.3),
+            blurRadius: 15,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Icon(
+                  Icons.schedule,
+                  color: Colors.white,
+                  size: 25,
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  'مواقيت الصلاة',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'Cairo',
+                  ),
+                ),
+              ),
+              Text(
+                'القاهرة',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withOpacity(0.8),
+                  fontFamily: 'Cairo',
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildPrayerTime('الفجر', '04:30'),
+              _buildPrayerTime('الظهر', '12:00'),
+              _buildPrayerTime('العصر', '15:30'),
+              _buildPrayerTime('المغرب', '18:00'),
+              _buildPrayerTime('العشاء', '19:30'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPrayerTime(String name, String time) {
+    return Column(
+      children: [
+        Text(
+          name,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white.withOpacity(0.8),
+            fontFamily: 'Cairo',
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          time,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontFamily: 'Cairo',
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFeaturesGrid() {
+    final features = [
+      {
+        'title': 'المصحف الشريف',
+        'icon': Icons.book,
+        'color': Color(0xFF2E7D32),
+        'route': QuranReaderScreen(),
+      },
+      {
+        'title': 'السبحة الإلكترونية',
+        'icon': Icons.radio_button_checked,
+        'color': Color(0xFF1565C0),
+        'route': TasbihScreen(),
+      },
+      {
+        'title': 'مواقيت الصلاة',
+        'icon': Icons.schedule,
+        'color': Color(0xFFE65100),
+        'route': PrayerTimesScreen(),
+      },
+      {
+        'title': 'اتجاه القبلة',
+        'icon': Icons.explore,
+        'color': Color(0xFF6A1B9A),
+        'route': QiblaScreen(),
+      },
+      {
+        'title': 'الأذكار',
+        'icon': Icons.auto_awesome,
+        'color': Color(0xFF00695C),
+        'route': AdhkarScreen(),
+      },
+      {
+        'title': 'التعليم الإسلامي',
+        'icon': Icons.school,
+        'color': Color(0xFF3F51B5),
+        'route': IslamicEducationScreen(),
+      },
+      {
+        'title': 'القصص الإسلامية',
+        'icon': Icons.auto_stories,
+        'color': Color(0xFFC2185B),
+        'route': IslamicStoriesScreen(),
+      },
+    ];
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 1.1,
+      ),
+      itemCount: features.length,
+      itemBuilder: (context, index) {
+        final feature = features[index];
+        return _buildFeatureCard(
+          context,
+          feature['title'] as String,
+          feature['icon'] as IconData,
+          feature['color'] as Color,
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => feature['route'] as Widget,
+            ),
           ),
         );
       },
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: GoogleFonts.amiri(
-        fontSize: 22,
-        fontWeight: FontWeight.bold,
-        color: AppColors.primaryDark,
-      ),
+  Widget _buildFeatureCard(
+    BuildContext context,
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: 600 + (title.length * 50)),
+      tween: Tween(begin: 0.0, end: 1.0),
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: value,
+          child: GestureDetector(
+            onTap: onTap,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    color.withOpacity(0.1),
+                    color.withOpacity(0.05),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: color.withOpacity(0.2),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: color.withOpacity(0.2),
+                    blurRadius: 15,
+                    offset: Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          color,
+                          color.withOpacity(0.8),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(35),
+                      boxShadow: [
+                        BoxShadow(
+                          color: color.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      icon,
+                      color: Colors.white,
+                      size: 35,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontFamily: 'Cairo',
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
-  }
-
-  String _getGreetingMessage() {
-    final hour = DateTime.now().hour;
-    if (hour < 12) {
-      return AppStrings.goodMorning;
-    } else if (hour < 18) {
-      return 'أهلاً وسهلاً';
-    } else {
-      return AppStrings.goodEvening;
-    }
-  }
-
-  IconData _getTimeIcon() {
-    final hour = DateTime.now().hour;
-    if (hour < 6 || hour > 18) {
-      return Icons.nightlight_round;
-    } else if (hour < 12) {
-      return Icons.wb_sunny_rounded;
-    } else {
-      return Icons.wb_sunny_outlined;
-    }
-  }
-
-  String _getCurrentDate() {
-    final now = DateTime.now();
-    final formatter = DateFormat('EEEE، d MMMM yyyy', 'ar');
-    final hijriDate = context.read<PrayerTimeProvider>().getHijriDate();
-    return '${formatter.format(now)} • $hijriDate';
-  }
-
-  String _getMotivationalMessage() {
-    final messages = AppStrings.motivationalMessages;
-    final today = DateTime.now();
-    final dayOfYear = today.difference(DateTime(today.year, 1, 1)).inDays;
-    final messageIndex = dayOfYear % messages.length;
-    return messages[messageIndex];
   }
 }
